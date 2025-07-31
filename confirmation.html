@@ -1,118 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CineMax - Booking Confirmation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="layout.css" rel="stylesheet">
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="layout.css" rel="stylesheet" />
+  </head>
+  <body>
     <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="success-icon mb-4">
-                            <i class="fas fa-check-circle fa-5x text-success"></i>
-                        </div>
-                        <h2 class="text-success mb-3">Booking Confirmed!</h2>
-                        <p class="lead mb-4">Thank you for your booking. Your tickets have been confirmed.</p>
-                        
-                        <div class="booking-details bg-light p-4 rounded mb-4 text-start">
-                            <h5>Booking Details</h5>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p><strong>Booking ID:</strong> <span id="bookingId"></span></p>
-                                    <p><strong>Movie:</strong> <span id="movieTitle"></span></p>
-                                    <p><strong>Date:</strong> <span id="showDate"></span></p>
-                                    <p><strong>Time:</strong> <span id="showTime"></span></p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <p><strong>Seats:</strong> <span id="selectedSeats"></span></p>
-                                    <p><strong>Tickets:</strong> <span id="ticketCount"></span></p>
-                                    <p><strong>Total Amount:</strong> <span id="totalAmount"></span></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="qr-code mb-4">
-                            <div class="bg-light p-4 rounded d-inline-block">
-                                <i class="fas fa-qrcode fa-4x text-muted"></i>
-                                <p class="mt-2 mb-0">QR Code for Entry</p>
-                            </div>
-                        </div>
-                        
-                        <div class="action-buttons">
-                            <button class="btn btn-primary me-2" onclick="downloadTicket()">
-                                <i class="fas fa-download me-2"></i>Download Ticket
-                            </button>
-                            <button class="btn btn-outline-secondary me-2" onclick="sendEmail()">
-                                <i class="fas fa-envelope me-2"></i>Email Ticket
-                            </button>
-                            <a href="index.html" class="btn btn-success">
-                                <i class="fas fa-home me-2"></i>Back to Home
-                            </a>
-                        </div>
-                    </div>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-body text-center">
+              <div class="success-icon mb-4">
+                <i class="fas fa-check-circle fa-5x text-success"></i>
+              </div>
+              <h2 class="text-success mb-3">Booking Confirmed!</h2>
+              <p class="lead mb-4">
+                Thank you for your booking. Your tickets have been confirmed.
+              </p>
+
+              <div class="booking-details bg-light p-4 rounded mb-4 text-start">
+                <h5>Booking Details</h5>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p>
+                      <strong>Booking ID:</strong> <span id="bookingId"></span>
+                    </p>
+                    <p><strong>Movie:</strong> <span id="movieTitle"></span></p>
+                    <p><strong>Date:</strong> <span id="showDate"></span></p>
+                    <p><strong>Time:</strong> <span id="showTime"></span></p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p>
+                      <strong>Seats:</strong> <span id="selectedSeats"></span>
+                    </p>
+                    <p>
+                      <strong>Tickets:</strong> <span id="ticketCount"></span>
+                    </p>
+                    <p>
+                      <strong>Total Amount:</strong>
+                      <span id="totalAmount"></span>
+                    </p>
+                  </div>
                 </div>
+              </div>
+
+              <div class="qr-code mb-4">
+                <div class="bg-light p-4 rounded d-inline-block">
+                  <i class="fas fa-qrcode fa-4x text-muted"></i>
+                  <p class="mt-2 mb-0">QR Code for Entry</p>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button class="btn btn-primary me-2" onclick="downloadTicket()">
+                  <i class="fas fa-download me-2"></i>Download Ticket
+                </button>
+                <button
+                  class="btn btn-outline-secondary me-2"
+                  onclick="sendEmail()"
+                >
+                  <i class="fas fa-envelope me-2"></i>Email Ticket
+                </button>
+                <a href="index.html" class="btn btn-success">
+                  <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Load booking details from URL parameters or localStorage
-        $(document).ready(function() {
-            loadBookingDetails();
-        });
+      // Load booking details from URL parameters or localStorage
+      $(document).ready(function () {
+        loadBookingDetails();
+      });
 
-        function loadBookingDetails() {
-            // Get booking details from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const bookingId = urlParams.get('bookingId') || 'BK' + Date.now();
-            
-            // Sample data - in real app, this would come from backend
-            $('#bookingId').text(bookingId);
-            $('#movieTitle').text('Avengers: Endgame');
-            $('#showDate').text('Saturday, July 29, 2025');
-            $('#showTime').text('7:30 PM');
-            $('#selectedSeats').text('D7, D8');
-            $('#ticketCount').text('2');
-            $('#totalAmount').text('$25.98');
-        }
+      function loadBookingDetails() {
+        // Get booking details from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get("bookingId") || "BK" + Date.now();
 
-        function downloadTicket() {
-            // Simulate ticket download
-            const link = document.createElement('a');
-            link.download = 'cinemax-ticket.pdf';
-            link.href = 'data:application/pdf,'; // In real app, generate actual PDF
-            link.click();
-            
-            showAlert('Ticket downloaded successfully!', 'success');
-        }
+        // Sample data - in real app, this would come from backend
+        $("#bookingId").text(bookingId);
+        $("#movieTitle").text("Avengers: Endgame");
+        $("#showDate").text("Saturday, July 29, 2025");
+        $("#showTime").text("7:30 PM");
+        $("#selectedSeats").text("D7, D8");
+        $("#ticketCount").text("2");
+        $("#totalAmount").text("$25.98");
+      }
 
-        function sendEmail() {
-            // Simulate sending email
-            showAlert('Ticket sent to your email address!', 'success');
-        }
+      function downloadTicket() {
+        // Simulate ticket download
+        const link = document.createElement("a");
+        link.download = "cinemax-ticket.pdf";
+        link.href = "data:application/pdf,"; // In real app, generate actual PDF
+        link.click();
 
-        function showAlert(message, type) {
-            const alert = `
+        showAlert("Ticket downloaded successfully!", "success");
+      }
+
+      function sendEmail() {
+        // Simulate sending email
+        showAlert("Ticket sent to your email address!", "success");
+      }
+
+      function showAlert(message, type) {
+        const alert = `
                 <div class="alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3" 
                      style="z-index: 9999;" role="alert">
                     ${message}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `;
-            $('body').append(alert);
-            
-            setTimeout(() => {
-                $('.alert').fadeOut();
-            }, 3000);
-        }
+        $("body").append(alert);
+
+        setTimeout(() => {
+          $(".alert").fadeOut();
+        }, 3000);
+      }
     </script>
-</body>
+  </body>
 </html>

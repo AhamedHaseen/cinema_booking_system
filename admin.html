@@ -1,368 +1,677 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CineMax - Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="layout.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="layout.css" rel="stylesheet" />
     <style>
-        .sidebar {
-            min-height: 100vh;
-            background: #343a40;
+      .sidebar {
+        min-height: 100vh;
+        background: #343a40;
+      }
+      .sidebar .nav-link {
+        color: #fff;
+        border-radius: 5px;
+        margin: 2px 0;
+      }
+      .sidebar .nav-link:hover,
+      .sidebar .nav-link.active {
+        background: #007bff;
+        color: #fff;
+      }
+      .main-content {
+        background: #f8f9fa;
+        min-height: 100vh;
+      }
+      .stat-card {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+        border-radius: 15px;
+      }
+      .stat-card:nth-child(2) .stat-card {
+        background: linear-gradient(45deg, #28a745, #1e7e34);
+      }
+      .stat-card:nth-child(3) .stat-card {
+        background: linear-gradient(45deg, #ffc107, #e0a800);
+      }
+      .stat-card:nth-child(4) .stat-card {
+        background: linear-gradient(45deg, #dc3545, #c82333);
+      }
+
+      /* Notification Styles */
+      .alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        animation: slideInRight 0.3s ease;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
         }
-        .sidebar .nav-link {
-            color: #fff;
-            border-radius: 5px;
-            margin: 2px 0;
+        to {
+          transform: translateX(0);
+          opacity: 1;
         }
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            background: #007bff;
-            color: #fff;
+      }
+
+      /* Form Validation */
+      .is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+      }
+
+      .is-valid {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+      }
+
+      /* Loading States */
+      .loading {
+        position: relative;
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+      .loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #007bff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        .main-content {
-            background: #f8f9fa;
-            min-height: 100vh;
+        100% {
+          transform: rotate(360deg);
         }
-        .stat-card {
-            background: linear-gradient(45deg, #007bff, #0056b3);
-            color: white;
-            border-radius: 15px;
-        }
-        .stat-card:nth-child(2) .stat-card {
-            background: linear-gradient(45deg, #28a745, #1e7e34);
-        }
-        .stat-card:nth-child(3) .stat-card {
-            background: linear-gradient(45deg, #ffc107, #e0a800);
-        }
-        .stat-card:nth-child(4) .stat-card {
-            background: linear-gradient(45deg, #dc3545, #c82333);
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar p-3">
-                <h4 class="text-white mb-4">
-                    <i class="fas fa-film me-2"></i>CineMax Admin
-                </h4>
-                <nav class="nav flex-column">
-                    <a class="nav-link active" href="#dashboard" data-tab="dashboard">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                    </a>
-                    <a class="nav-link" href="#movies" data-tab="movies">
-                        <i class="fas fa-film me-2"></i>Movies
-                    </a>
-                    <a class="nav-link" href="#bookings" data-tab="bookings">
-                        <i class="fas fa-ticket-alt me-2"></i>Bookings
-                    </a>
-                    <a class="nav-link" href="#customers" data-tab="customers">
-                        <i class="fas fa-users me-2"></i>Customers
-                    </a>
-                    <a class="nav-link" href="#food" data-tab="food">
-                        <i class="fas fa-utensils me-2"></i>Food & Drinks
-                    </a>
-                    <a class="nav-link" href="#reports" data-tab="reports">
-                        <i class="fas fa-chart-bar me-2"></i>Reports
-                    </a>
-                    <a class="nav-link" href="#settings" data-tab="settings">
-                        <i class="fas fa-cog me-2"></i>Settings
-                    </a>
-                    <hr class="text-white-50">
-                    <a class="nav-link" href="index.html">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Site
-                    </a>
-                </nav>
-            </div>
-
-            <!-- Main Content -->
-            <div class="col-md-9 col-lg-10 main-content p-4">
-                <!-- Dashboard Tab -->
-                <div id="dashboard" class="tab-content active">
-                    <h2 class="mb-4">Dashboard</h2>
-                    
-                    <!-- Statistics Cards -->
-                    <div class="row mb-4">
-                        <div class="col-md-3 mb-3">
-                            <div class="card stat-card">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-ticket-alt fa-2x mb-2"></i>
-                                    <h4>1,234</h4>
-                                    <p class="mb-0">Total Bookings</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card" style="background: linear-gradient(45deg, #28a745, #1e7e34); color: white;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-dollar-sign fa-2x mb-2"></i>
-                                    <h4>$45,678</h4>
-                                    <p class="mb-0">Total Revenue</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card" style="background: linear-gradient(45deg, #ffc107, #e0a800); color: white;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-film fa-2x mb-2"></i>
-                                    <h4>24</h4>
-                                    <p class="mb-0">Active Movies</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card" style="background: linear-gradient(45deg, #dc3545, #c82333); color: white;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-users fa-2x mb-2"></i>
-                                    <h4>567</h4>
-                                    <p class="mb-0">Customers</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Charts and Recent Activity -->
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Revenue Chart</h5>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="revenueChart" height="300"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Recent Bookings</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div id="recentBookings">
-                                        <!-- Recent bookings will be loaded here -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Movies Tab -->
-                <div id="movies" class="tab-content">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2>Movies Management</h2>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal">
-                            <i class="fas fa-plus me-2"></i>Add Movie
-                        </button>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped" id="moviesTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Title</th>
-                                            <th>Genre</th>
-                                            <th>Duration</th>
-                                            <th>Rating</th>
-                                            <th>Price</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Movies data will be loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bookings Tab -->
-                <div id="bookings" class="tab-content">
-                    <h2 class="mb-4">Bookings Management</h2>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <select class="form-select" id="statusFilter">
-                                <option value="">All Status</option>
-                                <option value="confirmed">Confirmed</option>
-                                <option value="cancelled">Cancelled</option>
-                                <option value="pending">Pending</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="date" class="form-control" id="dateFilter">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="Search bookings..." id="bookingSearch">
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped" id="bookingsTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Booking ID</th>
-                                            <th>Customer</th>
-                                            <th>Movie</th>
-                                            <th>Date & Time</th>
-                                            <th>Seats</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Bookings data will be loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add other tabs content here -->
-                <div id="customers" class="tab-content">
-                    <h2>Customers Management</h2>
-                    <p class="text-muted">Customer management features would go here...</p>
-                </div>
-
-                <div id="food" class="tab-content">
-                    <h2>Food & Drinks Management</h2>
-                    <p class="text-muted">Food items management features would go here...</p>
-                </div>
-
-                <div id="reports" class="tab-content">
-                    <h2>Reports</h2>
-                    <p class="text-muted">Analytics and reports would go here...</p>
-                </div>
-
-                <div id="settings" class="tab-content">
-                    <h2>Settings</h2>
-                    <p class="text-muted">System settings would go here...</p>
-                </div>
-            </div>
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar p-3">
+          <h4 class="text-white mb-4">
+            <i class="fas fa-film me-2"></i>CineMax Admin
+          </h4>
+          <nav class="nav flex-column">
+            <a class="nav-link active" href="#dashboard" data-tab="dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            <a class="nav-link" href="#movies" data-tab="movies">
+              <i class="fas fa-film me-2"></i>Movies
+            </a>
+            <a class="nav-link" href="#bookings" data-tab="bookings">
+              <i class="fas fa-ticket-alt me-2"></i>Bookings
+            </a>
+            <a class="nav-link" href="#customers" data-tab="customers">
+              <i class="fas fa-users me-2"></i>Customers
+            </a>
+            <a class="nav-link" href="#food" data-tab="food">
+              <i class="fas fa-utensils me-2"></i>Food & Drinks
+            </a>
+            <a class="nav-link" href="#reports" data-tab="reports">
+              <i class="fas fa-chart-bar me-2"></i>Reports
+            </a>
+            <a class="nav-link" href="#settings" data-tab="settings">
+              <i class="fas fa-cog me-2"></i>Settings
+            </a>
+            <hr class="text-white-50" />
+            <a class="nav-link" href="index.html">
+              <i class="fas fa-arrow-left me-2"></i>Back to Site
+            </a>
+          </nav>
         </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4">
+          <!-- Dashboard Tab -->
+          <div id="dashboard" class="tab-content active">
+            <h2 class="mb-4">Dashboard</h2>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+              <div class="col-md-3 mb-3">
+                <div class="card stat-card">
+                  <div class="card-body text-center">
+                    <i class="fas fa-ticket-alt fa-2x mb-2"></i>
+                    <h4>1,234</h4>
+                    <p class="mb-0">Total Bookings</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div
+                  class="card"
+                  style="
+                    background: linear-gradient(45deg, #28a745, #1e7e34);
+                    color: white;
+                  "
+                >
+                  <div class="card-body text-center">
+                    <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+                    <h4>$45,678</h4>
+                    <p class="mb-0">Total Revenue</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div
+                  class="card"
+                  style="
+                    background: linear-gradient(45deg, #ffc107, #e0a800);
+                    color: white;
+                  "
+                >
+                  <div class="card-body text-center">
+                    <i class="fas fa-film fa-2x mb-2"></i>
+                    <h4>24</h4>
+                    <p class="mb-0">Active Movies</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div
+                  class="card"
+                  style="
+                    background: linear-gradient(45deg, #dc3545, #c82333);
+                    color: white;
+                  "
+                >
+                  <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h4>567</h4>
+                    <p class="mb-0">Customers</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts and Recent Activity -->
+            <div class="row">
+              <div class="col-md-8">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Revenue Chart</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="revenueChart" height="300"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Recent Bookings</h5>
+                  </div>
+                  <div class="card-body">
+                    <div id="recentBookings">
+                      <!-- Recent bookings will be loaded here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Movies Tab -->
+          <div id="movies" class="tab-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2>Movies Management</h2>
+              <button
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#addMovieModal"
+              >
+                <i class="fas fa-plus me-2"></i>Add Movie
+              </button>
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="moviesTable">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Duration</th>
+                        <th>Rating</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Movies data will be loaded here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bookings Tab -->
+          <div id="bookings" class="tab-content">
+            <h2 class="mb-4">Bookings Management</h2>
+
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <select class="form-select" id="statusFilter">
+                  <option value="">All Status</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="cancelled">Cancelled</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <input type="date" class="form-control" id="dateFilter" />
+              </div>
+              <div class="col-md-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search bookings..."
+                  id="bookingSearch"
+                />
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="bookingsTable">
+                    <thead>
+                      <tr>
+                        <th>Booking ID</th>
+                        <th>Customer</th>
+                        <th>Movie</th>
+                        <th>Date & Time</th>
+                        <th>Seats</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Bookings data will be loaded here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add other tabs content here -->
+          <div id="customers" class="tab-content">
+            <h2>Customers Management</h2>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Total Customers</h5>
+                    <h3 class="text-primary">567</h3>
+                    <p class="text-muted">Active users in the system</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>New This Month</h5>
+                    <h3 class="text-success">23</h3>
+                    <p class="text-muted">New customer registrations</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="food" class="tab-content">
+            <h2>Food & Drinks Management</h2>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Menu Items</h5>
+                    <h3 class="text-info">8</h3>
+                    <p class="text-muted">Active food items</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Food Revenue</h5>
+                    <h3 class="text-success">$12,345</h3>
+                    <p class="text-muted">This month's food sales</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Popular Item</h5>
+                    <h3 class="text-warning">Popcorn</h3>
+                    <p class="text-muted">Best selling item</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="reports" class="tab-content">
+            <h2>Reports & Analytics</h2>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Quick Reports</h5>
+                  </div>
+                  <div class="card-body">
+                    <button
+                      class="btn btn-outline-primary mb-2 w-100"
+                      onclick="generateReport('daily')"
+                    >
+                      <i class="fas fa-chart-line me-2"></i>Daily Sales Report
+                    </button>
+                    <button
+                      class="btn btn-outline-success mb-2 w-100"
+                      onclick="generateReport('weekly')"
+                    >
+                      <i class="fas fa-chart-bar me-2"></i>Weekly Report
+                    </button>
+                    <button
+                      class="btn btn-outline-info mb-2 w-100"
+                      onclick="generateReport('monthly')"
+                    >
+                      <i class="fas fa-chart-pie me-2"></i>Monthly Analytics
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>System Health</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>Server Status</span>
+                      <span class="badge bg-success">Online</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>Database</span>
+                      <span class="badge bg-success">Connected</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>Payment Gateway</span>
+                      <span class="badge bg-success">Active</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="settings" class="tab-content">
+            <h2>System Settings</h2>
+            <div class="row">
+              <div class="col-md-8">
+                <div class="card">
+                  <div class="card-body">
+                    <form id="settingsForm">
+                      <div class="mb-3">
+                        <label class="form-label">Cinema Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          value="CineMax"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Booking Window (days)</label>
+                        <input type="number" class="form-control" value="7" />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Service Fee (%)</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          value="10"
+                          step="0.1"
+                        />
+                      </div>
+                      <button type="submit" class="btn btn-primary">
+                        Save Settings
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>System Actions</h5>
+                  </div>
+                  <div class="card-body">
+                    <button
+                      class="btn btn-warning w-100 mb-2"
+                      onclick="clearCache()"
+                    >
+                      <i class="fas fa-broom me-2"></i>Clear Cache
+                    </button>
+                    <button
+                      class="btn btn-info w-100 mb-2"
+                      onclick="exportData()"
+                    >
+                      <i class="fas fa-download me-2"></i>Export Data
+                    </button>
+                    <button
+                      class="btn btn-danger w-100"
+                      onclick="confirmSystemReset()"
+                    >
+                      <i class="fas fa-exclamation-triangle me-2"></i>System
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div
+      id="notificationContainer"
+      class="position-fixed top-0 end-0 p-3"
+      style="z-index: 9999"
+    >
+      <!-- Notifications will appear here -->
     </div>
 
     <!-- Add Movie Modal -->
     <div class="modal fade" id="addMovieModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Movie</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Movie</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="addMovieForm">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Title</label>
+                  <input type="text" class="form-control" required />
                 </div>
-                <div class="modal-body">
-                    <form id="addMovieForm">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Title</label>
-                                <input type="text" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Genre</label>
-                                <select class="form-select" required>
-                                    <option value="">Select Genre</option>
-                                    <option value="action">Action</option>
-                                    <option value="comedy">Comedy</option>
-                                    <option value="drama">Drama</option>
-                                    <option value="horror">Horror</option>
-                                    <option value="romance">Romance</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Duration (minutes)</label>
-                                <input type="number" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Price</label>
-                                <input type="number" step="0.01" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control" rows="3" required></textarea>
-                        </div>
-                    </form>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Genre</label>
+                  <select class="form-select" required>
+                    <option value="">Select Genre</option>
+                    <option value="action">Action</option>
+                    <option value="comedy">Comedy</option>
+                    <option value="drama">Drama</option>
+                    <option value="horror">Horror</option>
+                    <option value="romance">Romance</option>
+                  </select>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="addMovieForm" class="btn btn-primary">Add Movie</button>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Duration (minutes)</label>
+                  <input type="number" class="form-control" required />
                 </div>
-            </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Price</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3" required></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="submit" form="addMovieForm" class="btn btn-primary">
+              Add Movie
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            initializeAdmin();
-            loadDashboardData();
-            setupTabNavigation();
+      $(document).ready(function () {
+        initializeAdmin();
+        loadDashboardData();
+        setupTabNavigation();
+        setupNotificationSystem();
+      });
+
+      function initializeAdmin() {
+        // Initialize admin interface
+        $(".tab-content").hide();
+        $("#dashboard").show();
+      }
+
+      function setupTabNavigation() {
+        $(".nav-link[data-tab]").click(function (e) {
+          e.preventDefault();
+
+          const tabId = $(this).data("tab");
+
+          // Update active nav
+          $(".nav-link").removeClass("active");
+          $(this).addClass("active");
+
+          // Show selected tab
+          $(".tab-content").hide();
+          $(`#${tabId}`).show().addClass("fade-in");
+
+          // Load tab-specific data
+          loadTabData(tabId);
         });
+      }
 
-        function initializeAdmin() {
-            // Initialize admin interface
-            $('.tab-content').hide();
-            $('#dashboard').show();
+      function loadTabData(tabId) {
+        try {
+          switch (tabId) {
+            case "movies":
+              loadMoviesDataSafe();
+              break;
+            case "bookings":
+              loadBookingsDataSafe();
+              break;
+            case "customers":
+              showNotification("Customer management module loading...", "info");
+              break;
+            case "food":
+              showNotification("Food management module loading...", "info");
+              break;
+            case "reports":
+              showNotification("Reports module loading...", "info");
+              break;
+            case "settings":
+              showNotification("Settings module loading...", "info");
+              break;
+            default:
+              showNotification("Unknown module requested", "warning");
+          }
+        } catch (error) {
+          handleError(error, "Tab Loading");
         }
+      }
 
-        function setupTabNavigation() {
-            $('.nav-link[data-tab]').click(function(e) {
-                e.preventDefault();
-                
-                const tabId = $(this).data('tab');
-                
-                // Update active nav
-                $('.nav-link').removeClass('active');
-                $(this).addClass('active');
-                
-                // Show selected tab
-                $('.tab-content').hide();
-                $(`#${tabId}`).show().addClass('fade-in');
-                
-                // Load tab-specific data
-                loadTabData(tabId);
-            });
-        }
+      function loadDashboardData() {
+        // Load recent bookings
+        const recentBookings = [
+          {
+            id: "BK001",
+            customer: "John Doe",
+            movie: "Avengers: Endgame",
+            time: "2 hours ago",
+          },
+          {
+            id: "BK002",
+            customer: "Jane Smith",
+            movie: "The Lion King",
+            time: "4 hours ago",
+          },
+          {
+            id: "BK003",
+            customer: "Mike Johnson",
+            movie: "Joker",
+            time: "6 hours ago",
+          },
+        ];
 
-        function loadTabData(tabId) {
-            switch(tabId) {
-                case 'movies':
-                    loadMoviesData();
-                    break;
-                case 'bookings':
-                    loadBookingsData();
-                    break;
-                // Add other cases as needed
-            }
-        }
-
-        function loadDashboardData() {
-            // Load recent bookings
-            const recentBookings = [
-                { id: 'BK001', customer: 'John Doe', movie: 'Avengers: Endgame', time: '2 hours ago' },
-                { id: 'BK002', customer: 'Jane Smith', movie: 'The Lion King', time: '4 hours ago' },
-                { id: 'BK003', customer: 'Mike Johnson', movie: 'Joker', time: '6 hours ago' }
-            ];
-            
-            let html = '';
-            recentBookings.forEach(booking => {
-                html += `
+        let html = "";
+        recentBookings.forEach((booking) => {
+          html += `
                     <div class="border-bottom pb-2 mb-2">
                         <div class="d-flex justify-content-between">
                             <strong>${booking.id}</strong>
@@ -372,22 +681,43 @@
                         <small class="text-muted">${booking.movie}</small>
                     </div>
                 `;
-            });
-            
-            $('#recentBookings').html(html);
-        }
+        });
 
-        function loadMoviesData() {
-            // Sample movies data
-            const movies = [
-                { title: 'Avengers: Endgame', genre: 'Action', duration: '181 min', rating: '8.4', price: '$12.99', status: 'Active' },
-                { title: 'The Lion King', genre: 'Family', duration: '118 min', rating: '7.9', price: '$10.99', status: 'Active' },
-                { title: 'Joker', genre: 'Drama', duration: '122 min', rating: '8.5', price: '$11.99', status: 'Active' }
-            ];
-            
-            let html = '';
-            movies.forEach((movie, index) => {
-                html += `
+        $("#recentBookings").html(html);
+      }
+
+      function loadMoviesData() {
+        // Sample movies data
+        const movies = [
+          {
+            title: "Avengers: Endgame",
+            genre: "Action",
+            duration: "181 min",
+            rating: "8.4",
+            price: "$12.99",
+            status: "Active",
+          },
+          {
+            title: "The Lion King",
+            genre: "Family",
+            duration: "118 min",
+            rating: "7.9",
+            price: "$10.99",
+            status: "Active",
+          },
+          {
+            title: "Joker",
+            genre: "Drama",
+            duration: "122 min",
+            rating: "8.5",
+            price: "$11.99",
+            status: "Active",
+          },
+        ];
+
+        let html = "";
+        movies.forEach((movie, index) => {
+          html += `
                     <tr>
                         <td>${movie.title}</td>
                         <td>${movie.genre}</td>
@@ -405,25 +735,53 @@
                         </td>
                     </tr>
                 `;
-            });
-            
-            $('#moviesTable tbody').html(html);
-        }
+        });
 
-        function loadBookingsData() {
-            // Sample bookings data
-            const bookings = [
-                { id: 'BK001', customer: 'John Doe', movie: 'Avengers: Endgame', datetime: 'Jul 29, 7:30 PM', seats: 'D7, D8', amount: '$25.98', status: 'Confirmed' },
-                { id: 'BK002', customer: 'Jane Smith', movie: 'The Lion King', datetime: 'Jul 30, 2:00 PM', seats: 'A1, A2, A3', amount: '$32.97', status: 'Confirmed' },
-                { id: 'BK003', customer: 'Mike Johnson', movie: 'Joker', datetime: 'Jul 31, 9:00 PM', seats: 'F5', amount: '$11.99', status: 'Pending' }
-            ];
-            
-            let html = '';
-            bookings.forEach(booking => {
-                const statusClass = booking.status.toLowerCase() === 'confirmed' ? 'bg-success' : 
-                                  booking.status.toLowerCase() === 'pending' ? 'bg-warning' : 'bg-danger';
-                
-                html += `
+        $("#moviesTable tbody").html(html);
+      }
+
+      function loadBookingsData() {
+        // Sample bookings data
+        const bookings = [
+          {
+            id: "BK001",
+            customer: "John Doe",
+            movie: "Avengers: Endgame",
+            datetime: "Jul 29, 7:30 PM",
+            seats: "D7, D8",
+            amount: "$25.98",
+            status: "Confirmed",
+          },
+          {
+            id: "BK002",
+            customer: "Jane Smith",
+            movie: "The Lion King",
+            datetime: "Jul 30, 2:00 PM",
+            seats: "A1, A2, A3",
+            amount: "$32.97",
+            status: "Confirmed",
+          },
+          {
+            id: "BK003",
+            customer: "Mike Johnson",
+            movie: "Joker",
+            datetime: "Jul 31, 9:00 PM",
+            seats: "F5",
+            amount: "$11.99",
+            status: "Pending",
+          },
+        ];
+
+        let html = "";
+        bookings.forEach((booking) => {
+          const statusClass =
+            booking.status.toLowerCase() === "confirmed"
+              ? "bg-success"
+              : booking.status.toLowerCase() === "pending"
+              ? "bg-warning"
+              : "bg-danger";
+
+          html += `
                     <tr>
                         <td>${booking.id}</td>
                         <td>${booking.customer}</td>
@@ -442,18 +800,219 @@
                         </td>
                     </tr>
                 `;
-            });
-            
-            $('#bookingsTable tbody').html(html);
-        }
-
-        // Handle add movie form
-        $('#addMovieForm').submit(function(e) {
-            e.preventDefault();
-            alert('Movie added successfully!');
-            $('#addMovieModal').modal('hide');
-            loadMoviesData();
         });
+
+        $("#bookingsTable tbody").html(html);
+      }
+
+      // Handle add movie form
+      $("#addMovieForm").submit(function (e) {
+        e.preventDefault();
+
+        // Validate form
+        if (validateMovieForm()) {
+          showNotification("Movie added successfully!", "success");
+          $("#addMovieModal").modal("hide");
+          loadMoviesData();
+        } else {
+          showNotification(
+            "Please fill in all required fields correctly.",
+            "error"
+          );
+        }
+      });
+
+      // Notification System
+      function setupNotificationSystem() {
+        // Check for any initial errors or warnings
+        checkSystemStatus();
+      }
+
+      function showNotification(message, type = "info") {
+        const notificationId = "notification-" + Date.now();
+        const typeClasses = {
+          success: "alert-success",
+          error: "alert-danger",
+          warning: "alert-warning",
+          info: "alert-info",
+        };
+
+        const iconClasses = {
+          success: "fas fa-check-circle",
+          error: "fas fa-exclamation-circle",
+          warning: "fas fa-exclamation-triangle",
+          info: "fas fa-info-circle",
+        };
+
+        const notification = `
+          <div id="${notificationId}" class="alert ${typeClasses[type]} alert-dismissible fade show" role="alert">
+            <i class="${iconClasses[type]} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        `;
+
+        $("#notificationContainer").append(notification);
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          $(`#${notificationId}`).fadeOut(() => {
+            $(`#${notificationId}`).remove();
+          });
+        }, 5000);
+      }
+
+      function validateMovieForm() {
+        let isValid = true;
+        const requiredFields = [
+          'input[type="text"]',
+          "select",
+          'input[type="number"]',
+          "textarea",
+        ];
+
+        requiredFields.forEach((selector) => {
+          $("#addMovieForm " + selector).each(function () {
+            if (!$(this).val()) {
+              $(this).addClass("is-invalid");
+              isValid = false;
+            } else {
+              $(this).removeClass("is-invalid");
+            }
+          });
+        });
+
+        return isValid;
+      }
+
+      function checkSystemStatus() {
+        // Simulate checking system status
+        setTimeout(() => {
+          // Check for any critical issues
+          if (Math.random() > 0.8) {
+            showNotification(
+              "System warning: High server load detected",
+              "warning"
+            );
+          }
+
+          // Welcome message
+          showNotification("Admin panel loaded successfully", "success");
+        }, 1000);
+      }
+
+      // Add error handling for AJAX calls
+      function handleError(error, context) {
+        console.error("Error in " + context + ":", error);
+        showNotification(
+          `Error in ${context}: ${error.message || "Unknown error"}`,
+          "error"
+        );
+      }
+
+      // Enhanced data loading with error handling
+      function loadMoviesDataSafe() {
+        try {
+          loadMoviesData();
+        } catch (error) {
+          handleError(error, "Movies Data Loading");
+        }
+      }
+
+      function loadBookingsDataSafe() {
+        try {
+          loadBookingsData();
+        } catch (error) {
+          handleError(error, "Bookings Data Loading");
+        }
+      }
+
+      // System Action Functions
+      function generateReport(type) {
+        showNotification(`Generating ${type} report...`, "info");
+
+        // Simulate report generation
+        setTimeout(() => {
+          showNotification(
+            `${
+              type.charAt(0).toUpperCase() + type.slice(1)
+            } report generated successfully!`,
+            "success"
+          );
+        }, 2000);
+      }
+
+      function clearCache() {
+        showNotification("Clearing system cache...", "info");
+
+        setTimeout(() => {
+          showNotification("Cache cleared successfully!", "success");
+        }, 1500);
+      }
+
+      function exportData() {
+        showNotification("Preparing data export...", "info");
+
+        setTimeout(() => {
+          // Simulate file download
+          const link = document.createElement("a");
+          link.download = "cinemax-data-export.csv";
+          link.href =
+            "data:text/csv,header1,header2,header3\nvalue1,value2,value3";
+          link.click();
+
+          showNotification("Data exported successfully!", "success");
+        }, 2000);
+      }
+
+      function confirmSystemReset() {
+        if (
+          confirm(
+            "Are you sure you want to reset the system? This action cannot be undone."
+          )
+        ) {
+          showNotification(
+            "System reset initiated. This is a dangerous operation!",
+            "error"
+          );
+
+          setTimeout(() => {
+            showNotification(
+              "System reset cancelled for safety reasons.",
+              "warning"
+            );
+          }, 3000);
+        }
+      }
+
+      // Settings form handler
+      $(document).on("submit", "#settingsForm", function (e) {
+        e.preventDefault();
+        showNotification("Settings saved successfully!", "success");
+      });
+
+      // Add click handlers for action buttons in tables
+      $(document).on("click", ".btn-outline-primary", function () {
+        if ($(this).find(".fa-edit").length) {
+          showNotification("Edit functionality coming soon!", "info");
+        } else if ($(this).find(".fa-eye").length) {
+          showNotification("View details functionality coming soon!", "info");
+        }
+      });
+
+      $(document).on("click", ".btn-outline-danger", function () {
+        if ($(this).find(".fa-trash").length) {
+          if (confirm("Are you sure you want to delete this item?")) {
+            showNotification("Item deleted successfully!", "success");
+          }
+        }
+      });
+
+      $(document).on("click", ".btn-outline-secondary", function () {
+        if ($(this).find(".fa-print").length) {
+          showNotification("Printing functionality coming soon!", "info");
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
