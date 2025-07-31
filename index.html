@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMax - Online Cinema Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="layout.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <i class="fas fa-film me-2"></i>CineMax
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home" data-page="home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#movies" data-page="movies">Movies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#booking" data-page="booking">Book Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#food" data-page="food">Food & Drinks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#profile" data-page="profile">My Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about" data-page="about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link cart-icon" data-bs-toggle="modal" data-bs-target="#cartModal">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="badge bg-danger cart-count">0</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content Container -->
+    <div id="pageContent">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero-section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <h1 class="display-4 text-white mb-4">Welcome to CineMax</h1>
+                            <p class="lead text-white mb-4">Experience the best movies with premium comfort and delicious food</p>
+                            <button class="btn btn-primary btn-lg me-3" onclick="navigateToPage('movies')">Browse Movies</button>
+                            <button class="btn btn-outline-light btn-lg" onclick="navigateToPage('booking')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Movies -->
+            <div class="container py-5">
+                <h2 class="text-center mb-5">Now Showing</h2>
+                <div class="row" id="featuredMovies">
+                    <!-- Movies will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="bg-light py-5">
+                <div class="container">
+                    <h2 class="text-center mb-5">Why Choose CineMax?</h2>
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-couch fa-3x text-primary mb-3"></i>
+                            <h4>Premium Comfort</h4>
+                            <p>Luxurious reclining seats with ample legroom</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-utensils fa-3x text-primary mb-3"></i>
+                            <h4>Gourmet Food</h4>
+                            <p>Fresh popcorn, beverages, and delicious snacks</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                            <h4>Easy Booking</h4>
+                            <p>Book tickets online with just a few clicks</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movies Page -->
+        <div id="movies" class="page">
+            <div class="container py-5">
+                <h2 class="text-center mb-5">All Movies</h2>
+                
+                <!-- Filter Options -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <select class="form-select" id="genreFilter">
+                            <option value="">All Genres</option>
+                            <option value="action">Action</option>
+                            <option value="comedy">Comedy</option>
+                            <option value="drama">Drama</option>
+                            <option value="horror">Horror</option>
+                            <option value="romance">Romance</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="movieSearch" placeholder="Search movies...">
+                    </div>
+                </div>
+
+                <div class="row" id="allMovies">
+                    <!-- Movies will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Page -->
+        <div id="booking" class="page">
+            <div class="container py-5">
+                <h2 class="text-center mb-5">Book Your Tickets</h2>
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Select Movie & Show</h5>
+                                
+                                <form id="bookingForm">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Select Movie</label>
+                                            <select class="form-select" id="movieSelect" required>
+                                                <option value="">Choose a movie...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Select Date</label>
+                                            <input type="date" class="form-control" id="dateSelect" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Select Time</label>
+                                            <select class="form-select" id="timeSelect" required>
+                                                <option value="">Choose show time...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Number of Tickets</label>
+                                            <select class="form-select" id="ticketCount" required>
+                                                <option value="">Select tickets...</option>
+                                                <option value="1">1 Ticket</option>
+                                                <option value="2">2 Tickets</option>
+                                                <option value="3">3 Tickets</option>
+                                                <option value="4">4 Tickets</option>
+                                                <option value="5">5 Tickets</option>
+                                                <option value="6">6 Tickets</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Seat Selection -->
+                                    <div id="seatSelection" style="display: none;">
+                                        <h6>Select Your Seats</h6>
+                                        <div class="seat-map mb-3">
+                                            <div class="screen mb-3">
+                                                <div class="screen-label">SCREEN</div>
+                                            </div>
+                                            <div id="seatGrid">
+                                                <!-- Seats will be generated here -->
+                                            </div>
+                                            <div class="seat-legend mt-3">
+                                                <span class="seat available me-3"><i class="fas fa-square"></i> Available</span>
+                                                <span class="seat selected me-3"><i class="fas fa-square"></i> Selected</span>
+                                                <span class="seat occupied"><i class="fas fa-square"></i> Occupied</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Booking Summary</h5>
+                                <div id="bookingSummary">
+                                    <p class="text-muted">Select movie and show details to see summary</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food & Drinks Page -->
+        <div id="food" class="page">
+            <div class="container py-5">
+                <h2 class="text-center mb-5">Food & Drinks</h2>
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="row" id="foodItems">
+                            <!-- Food items will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card sticky-top">
+                            <div class="card-body">
+                                <h5 class="card-title">Your Order</h5>
+                                <div id="foodOrder">
+                                    <p class="text-muted">Your cart is empty</p>
+                                </div>
+                                <div class="total-amount">
+                                    <strong>Total: $<span id="foodTotal">0.00</span></strong>
+                                </div>
+                                <button class="btn btn-primary w-100 mt-3" id="addToBooking">Add to Booking</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile" class="page">
+            <div class="container py-5">
+                <h2 class="text-center mb-5">My Profile</h2>
+                
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Booking History</h5>
+                                <div id="bookingHistory">
+                                    <!-- Booking history will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Personal Information</h5>
+                                <form id="profileForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" value="John">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" value="Doe">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" id="phone" value="+1 234 567 8900">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="container py-5">
+                <h2 class="text-center mb-5">About CineMax</h2>
+                
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Our Story</h5>
+                                <p>CineMax has been providing the ultimate movie experience since 2020. With state-of-the-art facilities, premium seating, and gourmet food options, we're committed to making every visit memorable.</p>
+                                
+                                <h5 class="card-title mt-4">Contact Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Cinema Street, Movie City, MC 12345</p>
+                                        <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
+                                        <p><i class="fas fa-envelope me-2"></i> info@cinemax.com</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Operating Hours</h6>
+                                        <p>Monday - Thursday: 10:00 AM - 11:00 PM<br>
+                                        Friday - Sunday: 10:00 AM - 12:00 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Your Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cartItems">
+                        <p class="text-muted">Your cart is empty</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+                    <button type="button" class="btn btn-primary" id="checkoutBtn">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+        <!-- Notifications will appear here -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="animation.js"></script>
+</body>
+</html>
